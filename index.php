@@ -17,25 +17,21 @@ try {
     die("Connection failed: " . $e->getMessage());
 }
 
-// Check if the form is submitted for QR code login via image upload
+
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scan_qr'])) {
-    // Check if a previous request was made within the last minute
     if (isset($_SESSION['last_upload_time']) && time() - $_SESSION['last_upload_time'] < 60) {
         echo "Please wait at least 1 minute before uploading another image.";
         exit;
     }
 
-    // Check if an image file was uploaded
     if (isset($_FILES['qr_image']) && $_FILES['qr_image']['error'] === UPLOAD_ERR_OK) {
-        // Validate file type
         $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
         if (!in_array($_FILES['qr_image']['type'], $allowed_types)) {
             echo "Only JPEG, PNG, and GIF images are allowed.";
             exit;
         }
 
-        // Validate file size (limit to 5MB)
-        $max_size = 5 * 1024 * 1024; // 5MB in bytes
+        $max_size = 5 * 1024 * 1024; 
         if ($_FILES['qr_image']['size'] > $max_size) {
             echo "File size exceeds the maximum limit of 5MB.";
             exit;
@@ -44,14 +40,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scan_qr'])) {
         $qr_image = $_FILES['qr_image']['tmp_name'];
         $decoded_qr_code = scanQRCode($qr_image);
         if ($decoded_qr_code !== false) {
-            // Extract username, registration code, and CSRF token from QR code content
             $qr_data = $decoded_qr_code['data'][0]['allFields'][0]['fieldValue'];
             preg_match_all('/Username: (.*?)\nRegistration Code: (.*?)\nCSRF Token: (.*)/', $qr_data, $matches);
             $username = $matches[1][0];
             $registration_code = $matches[2][0];
             $csrf_token = $matches[3][0];
 
-            // Validate username and registration code against the database
             $sql = "SELECT * FROM users WHERE username=:username AND registration_code=:registration_code";
             $stmt = $conn->prepare($sql);
             $stmt->bindParam(':username', $username);
@@ -60,10 +54,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scan_qr'])) {
                 $stmt->execute();
                 $user = $stmt->fetch(PDO::FETCH_ASSOC);
                 if ($user) {
-                    // Store username and CSRF token in session
                     $_SESSION['username'] = $username;
                     $_SESSION['csrf_token'] = $csrf_token;
-                    $_SESSION['last_upload_time'] = time(); // Record the time of this upload
+                    $_SESSION['last_upload_time'] = time(); 
                     header("Location: dashboard.php");
                     exit;
                 } else {
@@ -80,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scan_qr'])) {
     }
 }
 
-// Function to scan QR code using Guzzle for API requests
+
 function scanQRCode($qr_image) {
     $client = new \GuzzleHttp\Client();
 
