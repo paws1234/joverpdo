@@ -1,0 +1,6 @@
+{
+    "require": {
+        "php-http/client-common": "^2.7",
+        "guzzlehttp/guzzle": "^7.8"
+    }
+}
