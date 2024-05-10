@@ -1,9 +1,9 @@
 <?php
 
 session_start();
-
+//kani ari to gikuha ang fucntion na guzzle shit
 require_once __DIR__ . '/vendor/autoload.php';
-
+//datbase shits
 $servername = "localhost";
 $username = "paws";
 $password = "paws";
@@ -42,7 +42,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['register'])) {
     }
 }
 
-
+//sabotable ra ang function names api ako gigamit para maka pa chuychuy nya generate nig csrf i sud ang username og ang registration code mao nay himoon as a qrcode na i scan mao 
+//mao toy sud sa qrcode inig scan
 function generateQRCode($username, $registrationCode) {
     $csrfToken = bin2hex(random_bytes(32)); 
     $data = "Username: $username\nRegistration Code: $registrationCode\nCSRF Token: $csrfToken";
@@ -65,6 +66,7 @@ function generateQRCode($username, $registrationCode) {
     echo "</div>";
 }
 ?>
+//ari mag register kung successfull maka generate siya og qrcode
 <!DOCTYPE html>
 <html lang="en">
 <head>
