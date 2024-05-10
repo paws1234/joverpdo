@@ -1,4 +1,5 @@
 <?php
+//logout shit rani diri 
 session_start();
 $_SESSION = array();
 session_destroy();
