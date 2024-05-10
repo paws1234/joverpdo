@@ -1,10 +1,11 @@
 <?php
+//same old same old i check ang session regarding sa credentials og token para maka authenticate 
 session_start();
 if (!isset($_SESSION['username']) || !isset($_SESSION['csrf_token'])) {
     header("Location: index.php");
     exit;
 }
-
+// i check if ang request bajud kay post 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (!isset($_POST['csrf_token']) || $_POST['csrf_token'] !== $_SESSION['csrf_token']) {
         echo "Invalid CSRF token.";
@@ -16,6 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
 ?>
+    //dashboard shits raning naa sa ubos//
 <!DOCTYPE html>
 <html lang="en">
 <head>
