@@ -91,7 +91,7 @@ function scanQRCode($qr_image) {
             ],
             'headers' => [
                 'X-RapidAPI-Host' => 'qr-code-and-barcode-scanner.p.rapidapi.com',
-                'X-RapidAPI-Key' => 'f161ffaf6amsh3818e8c5b2e8a0fp1aa104jsn1a38027a5b44',
+                'X-RapidAPI-Key' => 'secretkey',
             ],
         ]);
 
