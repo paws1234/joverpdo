@@ -1,8 +1,8 @@
 <?php
 session_start();
-
+//ari ang fucntion para maka access or maka request sa api endpoint guzzle ato gamit ash/lloyd
 require_once 'vendor/autoload.php';
-
+//mao ni
 use GuzzleHttp\Client;
 
 $servername = "localhost";
@@ -17,28 +17,31 @@ try {
     die("Connection failed: " . $e->getMessage());
 }
 
-
+//i check diri na if kung when gi upload chuy chuy rani
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scan_qr'])) {
     if (isset($_SESSION['last_upload_time']) && time() - $_SESSION['last_upload_time'] < 60) {
         echo "Please wait at least 1 minute before uploading another image.";
         exit;
     }
-
+    //kani diri i check kung way error during upload shit 
     if (isset($_FILES['qr_image']) && $_FILES['qr_image']['error'] === UPLOAD_ERR_OK) {
         $allowed_types = ['image/jpeg', 'image/png', 'image/gif'];
+        //kani kay i check what type of of image na shit
         if (!in_array($_FILES['qr_image']['type'], $allowed_types)) {
             echo "Only JPEG, PNG, and GIF images are allowed.";
             exit;
         }
-
+       //i check diri nag size sabotable ra ang variable name ash/lloyd
         $max_size = 5 * 1024 * 1024; 
         if ($_FILES['qr_image']['size'] > $max_size) {
             echo "File size exceeds the maximum limit of 5MB.";
             exit;
         }
-
+      //ari ma sotre ang iamge inig upload sa user 
         $qr_image = $_FILES['qr_image']['tmp_name'];
+        // ari i call ang fucntion para maka scan sa qr code
         $decoded_qr_code = scanQRCode($qr_image);
+        //ari i check ni diri ang parameters sa qrcode shit kung sakto ba nya kugn sakto maka login ang user
         if ($decoded_qr_code !== false) {
             $qr_data = $decoded_qr_code['data'][0]['allFields'][0]['fieldValue'];
             preg_match_all('/Username: (.*?)\nRegistration Code: (.*?)\nCSRF Token: (.*)/', $qr_data, $matches);
@@ -73,7 +76,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['scan_qr'])) {
     }
 }
 
-
+//sabotable raman guro ang function name ari i scan ang image or qrcode gamit ko og api naa nay parameters sa ubos which is sabotable ra di nako ma disclose ang secret key kay 
+//related siya sa akong personal account 
 function scanQRCode($qr_image) {
     $client = new \GuzzleHttp\Client();
 
@@ -108,7 +112,7 @@ function scanQRCode($qr_image) {
     }
 }
 ?>
-
+//ari login page scanning sa qr code and upload shit
 <!DOCTYPE html>
 <html lang="en">
 <head>
