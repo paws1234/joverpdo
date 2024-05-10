@@ -1,5 +1,5 @@
 <?php
-//same old same old i check ang session regarding sa credentials og token para maka authenticate 
+//same old same old i check ang session regarding sa credentials og token para maka authenticate katong gikan sa qr code na gi upload og na scan successfully
 session_start();
 if (!isset($_SESSION['username']) || !isset($_SESSION['csrf_token'])) {
     header("Location: index.php");
